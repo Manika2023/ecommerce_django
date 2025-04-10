@@ -131,6 +131,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # change url from accounts/login to login
 LOGIN_REDIRECT_URL = '/profile/'
 
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
