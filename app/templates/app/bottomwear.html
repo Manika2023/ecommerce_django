@@ -2,27 +2,29 @@
 {% load static %}
 {% block title %}Bottom wear{% endblock title %}
 {% block main-content %}
-<div class="container-fluid my-3">
-  <div class="row">
-    <!-- Sidebar for categories -->
-    <div class="col-lg-2 col-md-3 col-sm-4 col-12 mb-3">
-      <div class="list-group">
-        <a href="{% url 'bottomwear' %}" class="list-group-item list-group-item-action" aria-current='true'>
-          All Bottom Wears
-        </a> 
-        <a href="{% url 'bottomweardata' 'Nike' %}" class="list-group-item list-group-item-action">Nike</a>
-        <a href="{% url 'bottomweardata' 'Adidas' %}" class="list-group-item list-group-item-action">Adidas</a>
-        <a href="{% url 'bottomweardata' 'Puma' %}" class="list-group-item list-group-item-action">Puma</a>
-        <a href="{% url 'bottomweardata' 'Reebok' %}" class="list-group-item list-group-item-action">Reebok</a>
-        <a href="{% url 'bottomweardata' 'below' %}" class="list-group-item list-group-item-action">Below 500</a>
-        <a href="{% url 'bottomweardata' 'above' %}" class="list-group-item list-group-item-action">Above 500</a>
-      </div>
-    </div>
+<div class="py-4" style="background: linear-gradient(to bottom, #fff0f5, #ffffff);">
 
-    <!-- Main content for products -->
-    <div class="col-lg-10 col-md-9 col-sm-8 col-12">
-      <div class="row">
-        {% for product in bottomwear %}
+  <div class="container-fluid my-3">
+    <div class="row">
+      <!-- Sidebar for categories -->
+      <div class="col-lg-2 col-md-3 col-sm-4 col-12 mb-3">
+        <div class="list-group">
+          <a href="{% url 'bottomwear' %}" class="list-group-item list-group-item-action" aria-current='true'>
+            All Bottom Wears
+          </a> 
+          <a href="{% url 'bottomweardata' 'Nike' %}" class="list-group-item list-group-item-action">Nike</a>
+          <a href="{% url 'bottomweardata' 'Adidas' %}" class="list-group-item list-group-item-action">Adidas</a>
+          <a href="{% url 'bottomweardata' 'Puma' %}" class="list-group-item list-group-item-action">Puma</a>
+          <a href="{% url 'bottomweardata' 'Reebok' %}" class="list-group-item list-group-item-action">Reebok</a>
+          <a href="{% url 'bottomweardata' 'below' %}" class="list-group-item list-group-item-action">Below 500</a>
+          <a href="{% url 'bottomweardata' 'above' %}" class="list-group-item list-group-item-action">Above 500</a>
+        </div>
+      </div>
+      
+      <!-- Main content for products -->
+      <div class="col-lg-10 col-md-9 col-sm-8 col-12">
+        <div class="row">
+          {% for product in bottomwear %}
           <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex justify-content-center">
             <a href="{% url 'product-detail' product.id %}" class="btn w-100">
               <div class="card shadow-sm">
@@ -36,7 +38,8 @@
               </div>
             </a>
           </div> 
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

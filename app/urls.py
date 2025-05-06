@@ -28,6 +28,10 @@ urlpatterns = [
     path('address/', views.address, name='address'),
     path('mobile/', views.mobile, name='mobile'),
     path('mobiledata/<slug:data>/', views.mobile, name='mobiledata'),
+
+    path('other/', views.other_view, name='other'),
+    path('otherdata/<slug:data>/', views.other_view, name='otherdata'),
+    
     path('laptop/', views.laptop_view, name='laptop'),
     path('laptopata/<slug:data>/', views.laptop_view, name='laptopdata'),
     path('topwear/', views.topwear_view, name='topwear'),
@@ -39,10 +43,12 @@ urlpatterns = [
 
     # no extra class for login
     path('registration/', views.CustomerRegistrationView.as_view(), name='customerregistration'),
-    path('accounts/login/', auth_views.LoginView.as_view(template_name="app/login.html", authentication_form=LoginForm), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page="login"), name="logout"),
-    path('passwordchange/', auth_views.PasswordChangeView.as_view(template_name='app/passwordchange.html',form_class=MyPasswordChangeForm,success_url='/passwordchangedone/'), name='passwordchange'),
-    path('passwordchangedone/',auth_views.PasswordChangeDoneView.as_view(template_name='app/passwordChangeDone.html'),name="passwordchangedone"),
+    # path('accounts/login/', auth_views.LoginView.as_view(template_name="app/login.html", authentication_form=LoginForm), name='login'),
+    path('accounts/login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name="logout"),
+
+     path('passwordchange/', views.password_change_view, name='passwordchange'),
+    path('passwordchangedone/', views.password_change_done_view, name='passwordchangedone'),
 
     # path('password-reset/', auth_views.PasswordResetView.as_view(template_name='app/password_reset.html', email_template_name='app/password_reset_email.html',form_class=MyPasswordResetForm), name='password_reset'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='app/password_reset.html',form_class=MyPasswordResetForm), name='password_reset'),

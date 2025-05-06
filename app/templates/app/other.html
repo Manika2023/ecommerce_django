@@ -1,0 +1,54 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Other Products{% endblock title %}
+{% block main-content %}
+<div class="py-4"  style="background: linear-gradient(to bottom, #fff0f5, #ffffff);">
+
+<div class="container my-5">
+  <div class="row">
+
+    <!-- Sidebar for filters -->
+    <div class="col-lg-2 col-md-3 col-sm-4 col-12 mb-3">
+      <div class="list-group">
+        <a href="{% url 'other' %}" class="list-group-item list-group-item-action" aria-current='true'>
+          All Products
+        </a> 
+        <a href="{% url 'otherdata' 'toys' %}" class="list-group-item list-group-item-action">Toys</a>
+        <a href="{% url 'otherdata' 'decor' %}" class="list-group-item list-group-item-action">Home Decor</a>
+        <a href="{% url 'otherdata' 'accessories' %}" class="list-group-item list-group-item-action">Accessories</a>
+        <a href="{% url 'otherdata' 'stationery' %}" class="list-group-item list-group-item-action">Stationery</a>
+        <a href="{% url 'otherdata' 'below' %}" class="list-group-item list-group-item-action">Below ₹1000</a>
+        <a href="{% url 'otherdata' 'above' %}" class="list-group-item list-group-item-action">Above ₹1000</a>
+      </div>
+    </div>
+
+    <!-- Product cards -->
+    <div class="col-lg-10 col-md-9 col-sm-8 col-12">
+      <div class="row">
+        {% for product in other_products %}
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex justify-content-center">
+            <a href="{% url 'product-detail' product.id %}" class="btn w-100">
+              <div class="card shadow-sm">
+                <img src="{{ product.product_image.url }}" alt="{{ product.title }}" class="card-img-top img-fluid" style="height: 250px; object-fit: cover;">
+                <div class="card-body text-center">
+                  <h6 class="fw-bold">{{ product.title }}</h6>
+                  <p class="fw-bold mb-1">Rs. {{ product.discounted_price }}
+                    <small class="fw-light text-decoration-line-through">{{ product.selling_price }}</small>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div> 
+        {% empty %}
+          <div class="col-12">
+            <p class="text-center text-muted">No products found in this category.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+     
+</div>
+{% endblock main-content %}

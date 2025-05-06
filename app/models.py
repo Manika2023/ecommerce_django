@@ -42,14 +42,16 @@ CATEGORY_CHOICES=(
      ('L',"Laptop"),
      ('TW',"Top Wear"),
      ('BW',"Bottom Wear"),
+     ('other',"other")
 )
+
 class Product(models.Model):
      title= models.CharField(max_length=100)
      selling_price= models.FloatField()
      discounted_price=models.FloatField()
      description = models.TextField() 
      brand= models.CharField(max_length=100)
-     category=models.CharField(choices=CATEGORY_CHOICES,max_length=2)
+     category=models.CharField(choices=CATEGORY_CHOICES,max_length=18)
      product_image = models.ImageField(upload_to='productimg')
 
      def __str__(self):

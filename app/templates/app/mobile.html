@@ -2,25 +2,28 @@
 {% load static %}
 {% block title %}Mobile{% endblock title %}
 {% block main-content %}
-<div class="container my-5">
-  <div class="row">
-    <!-- Sidebar for categories -->
-    <div class="col-lg-2 col-md-3 col-sm-4 col-12 mb-3">
-      <div class="list-group">
-        <a href="{% url 'mobile' %}" class="list-group-item list-group-item-action" aria-current='true'>
-          All Mobile
-        </a> 
-        <a href="{% url 'mobiledata' 'Redmi' %}" class="list-group-item list-group-item-action">Redmi</a>
-        <a href="{% url 'mobiledata' 'Samsung' %}" class="list-group-item list-group-item-action">Samsung</a>
-        <a href="{% url 'mobiledata' 'below' %}" class="list-group-item list-group-item-action">Below 10000</a>
-        <a href="{% url 'mobiledata' 'above' %}" class="list-group-item list-group-item-action">Above 10000</a>
-      </div>
-    </div>
+<div class="py-4"  style="background: linear-gradient(to bottom, #fff0f5, #ffffff);">
 
-    <!-- Main content for products -->
-    <div class="col-lg-10 col-md-9 col-sm-8 col-12">
-      <div class="row">
-        {% for product in mobiles %}
+  <div class="container my-5">
+    <div class="row">
+      <!-- Sidebar for categories -->
+      <div class="col-lg-2 col-md-3 col-sm-4 col-12 mb-3">
+        <div class="list-group">
+          <a href="{% url 'mobile' %}" class="list-group-item list-group-item-action" aria-current='true'>
+            All Mobile
+          </a> 
+          <a href="{% url 'mobiledata' 'Redmi' %}" class="list-group-item list-group-item-action">Redmi</a>
+          <a href="{% url 'mobiledata' 'Samsung' %}" class="list-group-item list-group-item-action">Samsung</a>
+          <a href="{% url 'mobiledata' 'below' %}" class="list-group-item list-group-item-action">Below 10000</a>
+          <a href="{% url 'mobiledata' 'above' %}" class="list-group-item list-group-item-action">Above 10000</a>
+          
+        </div>
+      </div>
+      
+      <!-- Main content for products -->
+      <div class="col-lg-10 col-md-9 col-sm-8 col-12">
+        <div class="row">
+          {% for product in mobiles %}
           <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex justify-content-center">
             <a href="{% url 'product-detail' product.id %}" class="btn w-100">
               <div class="card shadow-sm">
@@ -34,7 +37,8 @@
               </div>
             </a>
           </div> 
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

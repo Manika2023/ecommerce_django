@@ -19,3 +19,28 @@
  font-size: 24px;
  font-weight: bold;
 }
+
+
+  /* Shrinking gradient background */
+  .bg-shrink {
+    background: linear-gradient(to bottom, #ff4081 0%, #f8d0e0 100%);
+    padding: 50px 0;
+  }
+
+  /* Styling the text inside banner */
+  .banner-text {
+    animation: fadeInUp 2s ease-in-out;
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+

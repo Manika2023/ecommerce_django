@@ -1,39 +1,52 @@
 {% extends 'app/base.html' %} {% load static %} {% block title %}Customer
-Registration{% endblock title %} {% block main-content %}
-<div class="container">
-  <div class="row my-3">
-    <div class="col-sm-6 offset-sm-3">
-      <h3>Customer Registration</h3>
-      <hr />
+Registration{% endblock title %} 
 
-      <form action="" method="post" novalidate class="shadow p-5">
-         {% csrf_token %}
-         {% if messages %}
-            {% for message in messages %}
-               <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>
-            {% endfor %}
-         {% endif %}
-         
-        
+{% block main-content %}
+<div class="container">
+  <div class="row shadow-lg p-4 bg-white rounded align-items-center">
+
+    <!-- Left Side: Image -->
+    <div class="col-md-6 d-none d-md-block">
+      <img src="{% static 'app/images/register.avif' %}" alt="Register Banner" class="img-fluid rounded">
+    </div>
+
+    <!-- Right Side: Form -->
+    <div class="col-md-6">
+      <h3 class="mb-4">Customer Registration</h3>
+
+      <form action="" method="post" novalidate class="shadow-sm p-4 bg-light rounded">
+        {% csrf_token %}
+
+        {% if messages %}
+          {% for message in messages %}
+            <p {% if message.tags %} class="alert alert-{{message.tags}} mb-4" {% endif %}>{{message}}</p>
+          {% endfor %}
+        {% endif %}
+
         {% for fm in form %}
-        <div class="form-group mb-3">
-          {{fm.label_tag}} {{fm}}
-          <small class="text-danger">{{fm.errors|striptags}}</small>
-        </div>
+          <div class="form-group mb-3">
+            {{fm.label_tag}} {{fm}}
+            <small class="text-danger">{{fm.errors|striptags}}</small>
+          </div>
         {% endfor %}
-        <input type="submit" value="submit" class="btn btn-primary" />
-        <br />
-        <div class="text-center text-primary fw-bold">
-          <small
-            >Existing User ?
-            <a href="{% url 'login' %}" class="text-danger">Login Now</a></small
-          >
+
+        <input type="submit" value="Submit" class="btn btn-primary w-100" />
+
+        <div class="text-center text-muted mt-3">
+          <small>
+            Existing user? 
+            <a href="{% url 'login' %}" class="text-primary fw-bold">Login now</a>
+          </small>
         </div>
-        {% if form.non_field_errors %} {% for error in form.non_field_errors %}
-        <p class="alert alert-danger my-3">{{error}}</p>
-        {% endfor %} {% endif %}
+
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-danger mt-3">{{error}}</div>
+          {% endfor %}
+        {% endif %}
       </form>
     </div>
+
   </div>
 </div>
 {% endblock main-content %}

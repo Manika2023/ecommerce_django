@@ -4,34 +4,58 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext, gettext_lazy as _
 from django.contrib.auth import password_validation
 from .models import Customer
+from django.contrib.auth import authenticate
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class CustomerRegistrationForm(UserCreationForm):
-     password1 = forms.CharField(label='password',
-                                 widget=forms.PasswordInput(attrs={'class':'form-control'})
-                                 )
-     password2 = forms.CharField(label='Confirm Password Again',
-                                 widget=forms.PasswordInput(attrs={'class':'form-control'})
-                                 )
-     email = forms.CharField(required=True,
-                             widget=forms.EmailInput(attrs={'class':'form-control'})
-                             )
-     
-     class Meta:
-          model=User
-          fields = ['username','email','password1','password2']
-          labels = {'email':'Email'}
-          widgets= {'username':forms.TextInput(attrs={'class':'form-control'})}
+    password1 = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    password2 = forms.CharField(
+        label='Confirm Password Again',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    email = forms.CharField(
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
 
-# login form
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+        labels = {'email': 'Email'}
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords do not match. Please re-enter.")
+        return password2
+
+
+
 
 class LoginForm(AuthenticationForm):
-     # Marks "password" as translatable.
-     username = UsernameField(widget=forms.TextInput(attrs={'autofocus':True,'class':'form-control'}))
-     # # Standard autocomplete attribute for password fields.
-     # 'autocomplete' helps browsers autofill the password for returning users.
-     password = forms.CharField(label=_("password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'current-passsword','class':'form-control'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'autofocus': True, 'class': 'form-control'
+    }))
+    password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(attrs={
+        'autocomplete': 'current-password', 'class': 'form-control'
+    }))
+
+  
 
 # form for change password by old password
 class MyPasswordChangeForm(PasswordChangeForm):
@@ -57,6 +81,12 @@ class MyPasswordResetForm(PasswordResetForm):
      email=forms.EmailField(label=_("Email"),
           max_length=254,
           widget=forms.EmailInput(attrs={'autocomplete':'email','class':'form-control'}))     
+     def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError(_("No account found with this email address."))
+        return email     
+     
      
 
 class MySetPasswordForm(SetPasswordForm):

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from .models import Customer, Product, Cart, OrderPlaced
-from .forms import CustomerRegistrationForm,CustomerProfileForm
+from .forms import CustomerRegistrationForm,CustomerProfileForm,PasswordChangeForm
 from django.contrib import messages
 from django.db.models import Q
 from django.http import JsonResponse
@@ -10,7 +10,78 @@ from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from fuzzywuzzy import process  # Import fuzzy matching library
+from .forms import LoginForm
+from django.contrib.auth import authenticate, login,logout,update_session_auth_hash
 
+
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+
+# CustomerRegistrationView view
+class CustomerRegistrationView(View):
+    def get(self, request):
+        form = CustomerRegistrationForm()
+        return render(request, 'app/customerregistration.html', {'form': form})
+
+    def post(self, request):
+        form = CustomerRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Registration successful! Please login.')  # ✅ Adding success message
+            # return redirect('login')  
+        else:
+            messages.error(request, 'Please correct the errors below.')  # ✅ Adding error message if form is invalid
+
+        return render(request, 'app/customerregistration.html', {'form': form})
+
+# login view
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            uname = form.cleaned_data.get('username')
+            upass = form.cleaned_data.get('password')
+            user = authenticate(username=uname, password=upass)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Login Successful!')
+                return redirect('profile')
+            else:
+                messages.error(request, 'Invalid credentials.')
+        else:
+            messages.error(request, 'Invalid credentials.')
+    else:
+        form = LoginForm()
+    return render(request, 'app/login.html', {'form': form})
+
+
+
+def user_logout(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('login')
+
+
+@login_required
+def password_change_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important to keep user logged in
+            messages.success(request, 'Your password has been successfully changed.')
+            return redirect('passwordchangedone')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'app/passwordchange.html', {'form': form})
+
+
+@login_required
+def password_change_done_view(request):
+    messages.success(request, "Your password has been successfully changed.", extra_tags='password_change')
+    return render(request, 'app/passwordChangeDone.html')
 
 # home view
 class ProductView(View):
@@ -211,6 +282,7 @@ def address(request):
 
 
 def mobile(request,data="None"):
+  mobiles=""
   if data == 'None':
      mobiles = Product.objects.filter(category='M')
   elif data=="Redmi" or data == 'Samsung':
@@ -257,25 +329,26 @@ def bottom_view(request, data="None"):
     
     return render(request, 'app/bottomwear.html', {'bottomwear': bottomwear})
 
+
+def other_view(request, data="None"):
+    if data == 'None':
+        other_products = Product.objects.filter(category='other')
+    elif data in ['toys', 'decor', 'accessories', 'stationery']:  # Example product types
+        other_products = Product.objects.filter(category='other',brand=data)
+        print("Brand is:", data)
+        print("my products is",other_products)
+    elif data == 'below':
+        other_products = Product.objects.filter(category='other', discounted_price__lt=1000)
+    elif data == 'above':
+        other_products = Product.objects.filter(category='other', discounted_price__gt=1000)
+    else:
+        other_products = Product.objects.none()  # Empty queryset for unrecognized filters
+    
+    return render(request, 'app/other.html', {'other_products': other_products})
+
    
    
    
-
-class CustomerRegistrationView(View):
-    def get(self, request):
-        form = CustomerRegistrationForm()
-        return render(request, 'app/customerregistration.html', {'form': form})
-
-    def post(self, request):
-        form = CustomerRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Registration successful! Please login.')  # ✅ Adding success message
-            # return redirect('login')  
-        else:
-            messages.error(request, 'Please correct the errors below.')  # ✅ Adding error message if form is invalid
-
-        return render(request, 'app/customerregistration.html', {'form': form})
 
 
 @method_decorator(login_required,name="dispatch")
